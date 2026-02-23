@@ -8,6 +8,7 @@ import cocotb
 from cocotb.clock import Clock
 from cocotb.triggers import RisingEdge
 from cocotb_tools.runner import get_runner
+import logging
 
 LANGUAGE = os.getenv("HDL_TOPLEVEL_LANG", "verilog").lower().strip()
 
@@ -16,6 +17,9 @@ LANGUAGE = os.getenv("HDL_TOPLEVEL_LANG", "verilog").lower().strip()
 async def max_qos_simple_test(dut):
    """Test that max qos is calcuated properly using directed test"""
 
+   logger = logging.getLogger("max_qos.log")
+
+   qos_values = []  
    # Set initial input value to prevent it from floating
    dut.rst.value = 1
 
@@ -41,6 +45,8 @@ async def max_qos_simple_test(dut):
        dut.wr_vld.value = 1
        dut.wr_id.value  = i
        dut.wr_qos.value = val  # Assign the random value val to qos
+       qos_values.append(val)
+       logger.info(f"pushing {val} in {i}")
        await RisingEdge(dut.clk)
 
    dut.wr_vld.value = 0
@@ -50,6 +56,10 @@ async def max_qos_simple_test(dut):
        dut.rd_vld.value = 1
        dut.rd_id.value  = i
        await RisingEdge(dut.clk)
+       max_qos_out = max(qos_values)
+       qos_out = qos_values.pop(0)
+       assert qos_out == dut.rd_qos.value, f"qos value is not matching for {i}"
+       assert max_qos_out == dut.o_max_qos.value, f"max qos value is not matching for {i}"
 
    dut.rd_vld.value = 0
 

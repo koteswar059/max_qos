@@ -13,7 +13,7 @@ module max_qos(
   
   output [2:0] rd_qos,
   
-  output [2:0] max_qos
+  output [2:0] o_max_qos
 );
   
   
@@ -77,7 +77,7 @@ module max_qos(
     
   bar2bin u_bar2bin (
     .i_bar (max_qos_bar),
-    .o_bin (max_qos)
+    .o_bin (o_max_qos)
   );
   
 endmodule
