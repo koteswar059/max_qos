@@ -70,7 +70,7 @@ def test_max_qos_hidden_runner():
 
    proj_path = Path(__file__).resolve().parent.parent
 
-   sources = [proj_path / "sources/bin2bar_tree.sv", proj_path / "sources/bin2bar.sv", proj_path / "sources/bar2bin.sv", proj_path / "sources/max_qos.sv"]
+   sources = [ proj_path / "sources/max_qos.sv"]
 
    runner = get_runner(sim)
    runner.build(
