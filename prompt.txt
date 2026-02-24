@@ -28,14 +28,16 @@ Finding the max is compute intensive in hardware, please use the bargraph method
 Listing the steps below:
 
 1. store the QOS in binary format.
-2. Compute the bar graph version of QOS using tree structure to achieve minimum levels of combo logic. Showing below how it would look like:
-	0 - 0000_0000
-	1 - 0000_0001
+2. Compute the bar graph version of QOS using tree structure to achieve minimum levels of combo logic.
+Binary to bar graph conversion should also follow tree structure instead of big mux to save combo logic.
+ Showing below how it would look like:
+	0 - 0000_0001
+	1 - 0000_0011
 	.
 	.
 	7 - 1111_1111
 3. Find the maximum of the QOS in bar graph fashion by doing OR of all the valid values.
-4. Convert the value to binary when sending on output.
+4. Convert the value to binary when sending on output. This should not use priority encoder and use optimized combo to encode bits.
 5. make separate module for binary2bargraph and bargraph2binary so that it can be re-used for different modules. modules can created in same file to enable testing.
 
 Use optimized coding for 3 bit QOS to achieve maximum PPA.
