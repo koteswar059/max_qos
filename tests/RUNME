@@ -1,0 +1,1 @@
+uv run pytest test_max_qos_hidden.py --log-cli-level=INFO
