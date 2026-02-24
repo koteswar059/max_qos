@@ -36,6 +36,7 @@ Listing the steps below:
 	7 - 1111_1111
 3. Find the maximum of the QOS in bar graph fashion by doing OR of all the valid values.
 4. Convert the value to binary when sending on output.
+5. make separate module for binary2bargraph and bargraph2binary so that it can be re-used for different modules.
 
 Use optimized coding for 3 bit QOS to achieve maximum PPA.
 
