@@ -1,0 +1,44 @@
+complete the implementation in sources/max_qos.sv.
+
+This module calculates the max qos amongst the packets that are pending.
+Design can take maximum 16 packets. There will be no case where more than 16 packets come.
+QOS ranges from the value of 0-7 (3 bit signal)
+
+The interface of this module consists of below inputs:
+1. clk : 1 bit - clock used for synchronizing the data. Logic works on positive edge of clk
+2. rst : 1 bit - positive edge syncronous reset. 
+
+3. wr_vld : 1 bit - 1 value indicates the input traffic is valid. 0 indicate traffic is not valid
+4. wr_id  : 4 bit - value contains the id of the packet. ID will not be repeated until that has been read out
+5. wr_qos : 3 bit - value indicating the QOS of the packet. legal value 0-7 (unsigned)
+
+6. rd_vld : 1 bit - 1 values that the packet is being read. Once the packet is read, QOS value for that is no longer valid for max_qos computation
+7. rd_id  : 4 bit - value contains the id of the packet. ID can come only for the packets which are written in previous cycles and have not been read yet.
+
+
+The interface of this module consists of below outputs:
+1. rd_qos : 3 bit - stored value of the QOS for that packet. This is the value that came when wr_id came for that packet.
+2. o_max_qos : 3 bit - maximum value of the QOS of the packets that are still in queue(written, but have not been read out).
+
+Valid-Ready flow control is not present , so please keep storage for the maximum packets that can come.
+
+Implementation guide:
+
+Finding the max is compute intensive in hardware, please use the bargraph method of finding maximum.
+Listing the steps below:
+
+1. store the QOS in binary format.
+2. Compute the bar graph version of QOS using tree structure to achieve minimum levels of combo logic. Showing below how it would look like:
+	0 - 0000_0000
+	1 - 0000_0001
+	.
+	.
+	7 - 1111_1111
+3. Find the maximum of the QOS in bar graph fashion by doing OR of all the valid values.
+4. Convert the value to binary when sending on output.
+
+Use optimized coding for 3 bit QOS to achieve maximum PPA.
+
+
+
+
